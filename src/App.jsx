@@ -4,6 +4,7 @@ import Dashboard from './components/Dashboard'
 import ChallengeRoom from './components/ChallengeRoom'
 import Navbar from './components/Navbar'
 import './App.css'
+import { WebSocketProvider } from './WebSocketContext'
 
 function App() {
   const [userStats, setUserStats] = useState({
@@ -28,17 +29,19 @@ function App() {
   })
 
   return (
-    <BrowserRouter>
-      <div className="app bg-[#0f1117] min-h-screen text-white">
-        <Navbar userStats={userStats} />
-        <div className="w-full">
-          <Routes>
-            <Route path="/" element={<Dashboard userStats={userStats} />} />
-            <Route path="/challenge/:mode" element={<ChallengeRoom />} />
-          </Routes>
+    <WebSocketProvider>
+      <BrowserRouter>
+        <div className="app bg-[#0f1117] min-h-screen text-white">
+          <Navbar userStats={userStats} />
+          <div className="w-full">
+            <Routes>
+              <Route path="/" element={<Dashboard userStats={userStats} />} />
+              <Route path="/challenge/:mode" element={<ChallengeRoom />} />
+            </Routes>
+          </div>
         </div>
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </WebSocketProvider>
   )
 }
 
