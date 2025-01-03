@@ -66,6 +66,26 @@ function ChallengeRoom({ roomId, playerName }) {
       console.log('gameStart event received:', data);
       setGameStatus('playing');
       if (data.players && data.players.length === 2) {
+        const [player1, player2] = data.players;
+        setPlayers({
+          player1: { 
+            name: player1, 
+            avatar: '/placeholder.svg?height=40&width=40', 
+            score: data.scores?.[player1] || 0 
+          },
+          player2: { 
+            name: player2, 
+            avatar: '/placeholder.svg?height=40&width=40', 
+            score: data.scores?.[player2] || 0 
+          }
+        });
+      }
+    }
+
+    const handleJoineeGameStart = (data) => {
+      console.log('gameStart event received:', data);
+      setGameStatus('playing');
+      if (data.players && data.players.length === 2) {
         const opponent = data.players.find(p => p !== playerName);
         setPlayers(prev => ({
           player1: { ...prev.player1, name: playerName, score: data.scores?.[playerName] || 0 },
@@ -95,12 +115,14 @@ function ChallengeRoom({ roomId, playerName }) {
     socket.on('gameStart', handleGameStart)
     socket.on('scoreUpdate', handleScoreUpdate)
     socket.on('gameOver', handleGameOver)
+    socket.on('roomUpdate', handleJoineeGameStart)
 
     return () => {
       socket.off('roomUpdate', handleRoomUpdate)
       socket.off('gameStart', handleGameStart)
       socket.off('scoreUpdate', handleScoreUpdate)
       socket.off('gameOver', handleGameOver)
+      socket.off('roomUpdate', handleJoineeGameStart)
     }
   }, [socket, roomId, playerName])
 
