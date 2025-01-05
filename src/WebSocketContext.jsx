@@ -5,6 +5,8 @@ const WebSocketContext = createContext(null);
 
 export function WebSocketProvider({ children }) {
   const [socket, setSocket] = useState(null);
+  const url = import.meta.env.backend_url
+  console.log(url)
 
   useEffect(() => {
     const newSocket = io('http://localhost:3000', {
